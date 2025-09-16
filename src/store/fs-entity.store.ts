@@ -18,7 +18,7 @@ import { defineAsyncComponent } from 'vue';
 import { defineStore } from 'pinia';
 import isEmpty from 'lodash/isEmpty';
 import type { Nullable } from '@v1nt1248/3nclient-lib';
-import type { ListingEntry, ListingEntryExtended, WritableFS } from '@/types';
+import type { ListingEntry, ListingEntryExtended, WritableFS, FileW } from '@/types';
 import { useAppStore } from './app.store';
 import { useFsStore } from './fs.store';
 import { useFavoriteStore } from './favoririte.store';
@@ -378,6 +378,20 @@ export const useFsEntryStore = defineStore('fsEntry', () => {
     }
   }
 
+  async function openFile(
+    fsId: string,
+    fullPath: string,
+    isLinkPath = false
+  ) {
+    const fs = getFs(fsId);
+    const file = (isLinkPath ?
+      await (await fs.readLink(fullPath)).target() as FileW :
+      await (fs.writable ? fs.writableFile(fullPath) : fs.readonlyFile(fullPath))
+    );
+    await w3n.shell!.openFile!(file);
+  }
+
+
   /* favorites  */
 
   async function setFolderAsFavorite({ fsId, fullPath }: { fsId: string; fullPath: string }) {
@@ -422,6 +436,7 @@ export const useFsEntryStore = defineStore('fsEntry', () => {
     restoreEntity,
     restoreEntities,
     copyMoveEntities,
+    openFile,
     setFolderAsFavorite,
     removeFavoriteFolderFromList,
     unsetFolderAsFavorite,

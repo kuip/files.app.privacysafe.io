@@ -271,7 +271,7 @@ class LabelledStore implements LabelledFileStore {
       }
     });
     const type = (await this.dataFS.getXAttr(id, TYPE_ATTR_NAME)) as string;
-    return new Blob([bytes ? bytes : new Uint8Array()], { type });
+    return new Blob([bytes ? (bytes as BlobPart) : new Uint8Array()], { type });
   }
 
   getFolderRO(id: string): Promise<ReadonlyFS> {

@@ -14,16 +14,22 @@
  You should have received a copy of the GNU General Public License along with
  this program. If not, see <http://www.gnu.org/licenses/>.
 */
-import { createVideoThumbnail as createThumbnail, transformWeb3nFileToFile } from '@v1nt1248/3nclient-lib/utils';
+import {
+  createVideoThumbnail as makeVideoThumbnail,
+  schedulerYield,
+  transformWeb3nFileToFile,
+} from '@v1nt1248/3nclient-lib/utils';
 import type { Nullable } from '@v1nt1248/3nclient-lib';
 
 export async function createVideoThumbnail(fs: web3n.files.FS, path: string): Promise<Nullable<string>> {
-  return fs
-    .readonlyFile(path)
-    .then(file3n => transformWeb3nFileToFile(file3n))
-    .then(file => {
-      if (!file) return null;
+  const file3n = await fs.readonlyFile(path);
+  await schedulerYield();
 
-      return createThumbnail(file, 200, 5);
-    });
+  const file = await transformWeb3nFileToFile(file3n);
+  if (!file) {
+    throw new Error('web3n.files.ReadonlyFile to File transformation error.');
+  }
+  await schedulerYield();
+
+  return makeVideoThumbnail(file, 200, 5);
 }

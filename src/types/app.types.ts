@@ -80,4 +80,4 @@ export interface ListingEntryExtended extends web3n.files.Stats {
 }
 
 export type FsFolderEntityEvent = 'go' | 'go:linked-folder' | 'rename' | 'update:favorite' |
-'open:info' | 'open:file' | 'open:linked-file';
+'open:info';

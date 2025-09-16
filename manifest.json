@@ -3,12 +3,13 @@
   "appDomain": "files.app.privacysafe.io",
   "icon": "logo.png",
   "description": "Feature-rich file manager for secure storage of your digital assets.",
-  "version": "0.7.3",
+  "version": "0.7.6",
 
   "components": {
     "/index.html": {
       "startedBy": "user",
       "runtime": "web-gui",
+      "formFactor": [ "desktop", "tablet" ],
       "capsRequested": {
         "apps": "opener",
         "logout": "all",
@@ -23,21 +24,13 @@
             }
           },
           "openDashboard": true,
+          "openFile": "all",
           "mountVolumes": "all"
         },
         "storage": {
-          "appFS": [
-            {
-              "domain": "files.app.privacysafe.io",
-              "storage": "synced-n-local"
-            }
-          ],
+          "appFS": "default",
           "userFS": "all",
           "sysFS": "all"
-        },
-        "mail": {
-          "sendingTo": "all",
-          "receivingFrom": "all"
         },
         "connectivity": "check"
       },
@@ -58,13 +51,6 @@
       "description": "Feature-rich file manager for secure storage of your digital assets.",
       "component": "/index.html",
       "formFactor": [ "desktop", "tablet" ]
-    },
-    {
-      "name": "Storage",
-      "icon": "logo.png",
-      "description": "Feature-rich file manager for secure storage of your digital assets.",
-      "component": "/index.html",
-      "formFactor": "phone"
     }
   ]
 

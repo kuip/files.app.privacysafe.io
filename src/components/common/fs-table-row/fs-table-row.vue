@@ -17,10 +17,12 @@
 <script setup lang="ts">
   import { computed, ref } from 'vue';
   import get from 'lodash/get';
+  import size from 'lodash/size';
   import { type Nullable, Ui3nEditable, Ui3nIcon } from '@v1nt1248/3nclient-lib';
   import { getFileExtension, formatFileSize } from '@v1nt1248/3nclient-lib/utils';
   import { useDblClickHandler } from '@/composables/useDblClickHandler';
   import { useAbilities } from '@/composables/useAbilities';
+  import { useFsEntryStore } from '@/store';
   import type { ListingEntryExtended } from '@/types';
   import { FsTableRowProps, FsTableRowEmits } from './types';
   import FileType from '@/components/common/file-type/file-type.vue';
@@ -37,24 +39,27 @@
       return '';
     }
 
-    return getFileExtension(props.row.name).toLowerCase();
+    const value = getFileExtension(props.row.name).toLowerCase();
+    return size(value) > 5 ? '' : value;
   });
 
   const { canRename, canSetUnsetFavorite, canCopyMove } = useAbilities();
 
-  function onDblClick() {
+  const { openFile } = useFsEntryStore();
+
+  async function onDblClick() {
     switch (props.row.type) {
       case 'folder': {
         emits('action', { event: 'go', payload: props.row.fullPath });
         return;
       }
       case 'file': {
-        emits('action', { event: 'open:file', payload: props.row.fullPath });
+        await openFile(props.fsId, props.row.fullPath);
         return;
       }
       case 'link': {
         if (props.row.isFile) {
-          emits('action', { event: 'open:linked-file', payload: props.row.fullPath });
+          await openFile(props.fsId, props.row.fullPath, true);
         } else if (props.row.isFolder) {
           emits('action', { event: 'go:linked-folder', payload: props.row.fullPath });
         }
@@ -165,7 +170,7 @@
       :style="getFieldStyle('type')"
     >
       <file-type
-        v-if="row.type === 'file'"
+        v-if="fileExtension"
         :file-type="fileExtension"
       />
 

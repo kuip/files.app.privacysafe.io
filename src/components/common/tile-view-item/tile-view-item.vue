@@ -1,13 +1,31 @@
+<!--
+ Copyright (C) 2025 3NSoft Inc.
+
+ This program is free software: you can redistribute it and/or modify it under
+ the terms of the GNU General Public License as published by the Free Software
+ Foundation, either version 3 of the License, or (at your option) any later
+ version.
+
+ This program is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along with
+ this program. If not, see <http://www.gnu.org/licenses/>.
+-->
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
   import dayjs from 'dayjs';
-  import { type Nullable, Ui3nEditable, Ui3nIcon, Ui3nProgressLinear } from '@v1nt1248/3nclient-lib';
-  import { getFileExtension, isFileImage, isFileVideo, type TaskRunnerInstance } from '@v1nt1248/3nclient-lib/utils';
+  import { type Nullable, type TaskRunnerInstance, Ui3nEditable, Ui3nIcon, Ui3nProgressLinear } from '@v1nt1248/3nclient-lib';
+  import { getFileExtension, isFileImage, isFileVideo } from '@v1nt1248/3nclient-lib/utils';
   import type { FsFolderEntityEvent, ListingEntryExtended } from '@/types';
   import { useDblClickHandler } from '@/composables/useDblClickHandler';
   import { useAbilities } from '@/composables/useAbilities';
   import { createThumbnail as _createThumbnail } from '@/utils';
   import FileType from '@/components/common/file-type/file-type.vue';
+import { useFsEntryStore } from '@/store';
+  import size from 'lodash/size';
 
 
   const props = defineProps<{
@@ -34,7 +52,8 @@
       return '';
     }
 
-    return getFileExtension(props.item.name).toLowerCase();
+    const value = getFileExtension(props.item.name).toLowerCase();
+    return size(value) > 5 ? '' : value;
   });
 
   const displayingCTime = computed(() => props.item.ctime ? dayjs(props.item.ctime).format('YYYY-MM-DD') : '');
@@ -48,15 +67,29 @@
 
   const { handleDblClick } = useDblClickHandler(onClick, onDblClick);
 
+  const { openFile } = useFsEntryStore();
+
   function onClick(ev: MouseEvent) {
     ev.preventDefault();
     ev.stopImmediatePropagation();
     emits('action', { event: 'open:info', payload: { entity: props.item } });
   }
 
-  function onDblClick() {
-    if (props.item.type === 'folder') {
-      emits('action', { event: 'go', payload: props.item.fullPath });
+  async function onDblClick() {
+    switch (props.item.type) {
+      case 'folder':
+        emits('action', { event: 'go', payload: props.item.fullPath });
+        return;
+      case 'file':
+        await openFile(props.fsId, props.item.fullPath);
+        return;
+      case 'link':
+        if (props.item.isFile) {
+          await openFile(props.fsId, props.item.fullPath, true);
+        } else {
+          emits('action', { event: 'go:linked-folder', payload: props.item.fullPath });
+        }
+        return;
     }
   }
 
@@ -202,7 +235,7 @@
 
     <div :class="$style.footer">
       <file-type
-        v-if="item.type === 'file'"
+        v-if="fileExtension"
         :file-type="fileExtension"
       />
       <span v-else>&nbsp;</span>

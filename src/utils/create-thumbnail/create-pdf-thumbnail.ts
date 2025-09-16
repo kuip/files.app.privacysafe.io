@@ -14,15 +14,19 @@
  You should have received a copy of the GNU General Public License along with
  this program. If not, see <http://www.gnu.org/licenses/>.
 */
+import { schedulerYield } from '@v1nt1248/3nclient-lib/utils';
 import type { Nullable } from '@v1nt1248/3nclient-lib';
-import { createPdfThumbnail as createThumbnail } from '@/utils';
+import { createPdfThumbnail as makePdfThumbnail } from '@/utils';
 
 export async function createPdfThumbnail(fs: web3n.files.FS, path: string): Promise<Nullable<string>> {
-  return fs.readBytes(path).then(byteArray => {
-    if (!byteArray) {
-      throw new Error(`Error while ${path} file read`);
-    }
+  const file3n = await fs.readonlyFile(path);
+  await schedulerYield();
 
-    return createThumbnail(byteArray, 200);
-  });
+  const byteArray = await file3n.readBytes();
+  if (!byteArray) {
+    return null;
+  }
+  await schedulerYield();
+
+  return makePdfThumbnail(byteArray, 200);
 }

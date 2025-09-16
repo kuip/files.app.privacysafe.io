@@ -14,20 +14,18 @@
  You should have received a copy of the GNU General Public License along with
  this program. If not, see <http://www.gnu.org/licenses/>.
 */
-import { getFileExtension, mimeTypes, resizeImage, uint8ToDataURL } from '@v1nt1248/3nclient-lib/utils';
+import { resizeImage, schedulerYield, transformWeb3nFileToFile } from '@v1nt1248/3nclient-lib/utils';
 import type { Nullable } from '@v1nt1248/3nclient-lib';
 
 export async function createImageThumbnail(fs: web3n.files.FS, path: string): Promise<Nullable<string>> {
-  const fileExt = getFileExtension(path);
-  const fileMimeType = mimeTypes[fileExt] || 'image/jpeg';
-  return fs.readBytes(path).then(byteArray => {
-    if (!byteArray) {
-      throw new Error(`Error while ${path} file read`);
-    }
+  const file3n = await fs.readonlyFile(path);
+  await schedulerYield();
 
-    const base64Image = uint8ToDataURL(byteArray, fileMimeType);
-    if (!base64Image) return null;
+  const file = await transformWeb3nFileToFile(file3n);
+  if (!file) {
+    throw new Error('web3n.files.ReadonlyFile to File transformation error.');
+  }
+  await schedulerYield();
 
-    return resizeImage(base64Image, 200);
-  });
+  return resizeImage(file, 200);
 }

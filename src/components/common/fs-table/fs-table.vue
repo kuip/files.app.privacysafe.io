@@ -177,18 +177,6 @@
         console.warn(`This should read link, and open target folder. The second part requires some dance cause new fs should be added into fs.store`);
         return;
       }
-
-      case 'open:file': {
-        // XXX TODO
-        console.warn(`tell w3n.shell to open file when respective capability will be implemented`);
-        return;
-      }
-
-      case 'open:linked-file': {
-        // XXX TODO
-        console.warn(`This should read link, and tell w3n.shell to open target file when respective capability will be implemented`);
-        return;
-      }
     }
   }
 

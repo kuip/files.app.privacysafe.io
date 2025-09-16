@@ -1,4 +1,5 @@
 import * as pdfjs from 'pdfjs-dist';
+import { schedulerYield } from '@v1nt1248/3nclient-lib/utils';
 
 export async function createPdfThumbnail(byteArray: Uint8Array, targetSize: number): Promise<string> {
   pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
@@ -12,6 +13,7 @@ export async function createPdfThumbnail(byteArray: Uint8Array, targetSize: numb
   canvas.width = viewport.width;
   canvas.height = viewport.height;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  await schedulerYield();
   await page1.render({
     canvasContext: ctx,
     viewport,
