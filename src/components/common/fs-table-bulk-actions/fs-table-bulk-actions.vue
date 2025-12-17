@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { computed, inject } from 'vue';
   import isEmpty from 'lodash/isEmpty';
-  import { I18N_KEY } from '@v1nt1248/3nclient-lib/plugins';
+  import { I18N_KEY, I18nPlugin } from '@v1nt1248/3nclient-lib/plugins';
   import { Ui3nButton, Ui3nSwitch, Ui3nTooltip } from '@v1nt1248/3nclient-lib';
   import { useAbilities } from '@/composables/useAbilities';
   import { FS_TABLE_BULK_ACTIONS } from '@/constants';
@@ -12,7 +12,7 @@
   });
   const emits = defineEmits<FsTableBulkActionsEmits>();
 
-  const { $tr } = inject(I18N_KEY)!;
+  const { $tr } = inject<I18nPlugin>(I18N_KEY)!;
 
   const isSelectedEmpty = computed(() => isEmpty(props.selectedEntities));
 

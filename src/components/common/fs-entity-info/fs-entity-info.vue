@@ -19,7 +19,7 @@
   import dayjs from 'dayjs';
   import isEmpty from 'lodash/isEmpty';
   import { type Nullable, Ui3nButton, Ui3nChip, Ui3nIcon, Ui3nProgressCircular } from '@v1nt1248/3nclient-lib';
-  import { I18N_KEY } from '@v1nt1248/3nclient-lib/plugins';
+  import { I18N_KEY, I18nPlugin } from '@v1nt1248/3nclient-lib/plugins';
   import { formatFileSize, isFileImage, isFileVideo } from '@v1nt1248/3nclient-lib/utils';
   import { useFsEntryStore } from '@/store';
   import type { FsSEntityInfoProps, FsSEntityInfoEmits } from './types';
@@ -30,10 +30,11 @@
   const props = defineProps<FsSEntityInfoProps>();
   const emits = defineEmits<FsSEntityInfoEmits>();
 
-  const { $tr } = inject(I18N_KEY)!;
-  const { getEntityStats } = useFsEntryStore();
+  const { $tr } = inject<I18nPlugin>(I18N_KEY)!;
+  const { getEntityStats, getSyncedStatus } = useFsEntryStore();
 
   const entityStats = ref<Nullable<ListingEntryExtended & { thumbnail?: string }>>(null);
+  const entitySyncStatus = ref<web3n.files.SyncStatus>({} as web3n.files.SyncStatus);
 
   const fsIdValue = computed(() => props.fsId);
   const pathValue = computed(() => props.path);
@@ -130,6 +131,9 @@
 
         stopHashingProcess();
         await loadEntity(val);
+
+        const sStatus = await getSyncedStatus({ fsId: props.fsId, fullPath: val });
+        entitySyncStatus.value = sStatus || {} as web3n.files.SyncStatus;
 
         const { type, thumbnail, ext } = entityStats.value!;
         if (
@@ -240,6 +244,25 @@
       </div>
     </div>
 
+    <div :class="$style.row">
+      <span>{{ $tr('fs.entity.info.status') }}</span>
+      <section>
+        <p>state: <i>{{ entitySyncStatus?.state }}</i></p>
+
+        <p v-if="entitySyncStatus?.local">
+          local ver: <i>{{ entitySyncStatus?.local.latest }}</i>
+        </p>
+
+        <p v-if="entitySyncStatus?.synced">
+          synced ver: <i>{{ entitySyncStatus?.synced.latest }}</i>
+        </p>
+
+        <p v-if="entitySyncStatus?.remote">
+          remote ver: <i>{{ entitySyncStatus?.remote.latest }}</i>
+        </p>
+      </section>
+    </div>
+
     <template v-if="canHash">
       <div
         v-if="(!sha256hex || !sha512hex) && !(calculating256 || calculating512)"
@@ -289,6 +312,7 @@
         </div>
       </div>
     </template>
+
 
     <div
       v-if="isLoading"
@@ -405,6 +429,16 @@
       &.progress {
         font-weight: 600;
         color: var(--color-text-control-accent-default);
+      }
+    }
+
+    p {
+      margin: 0 0 var(--spacing-xs) 0;
+      font-weight: 400;
+      color: var(--color-text-table-primary-default);
+
+      i {
+        font-weight: 600;
       }
     }
   }

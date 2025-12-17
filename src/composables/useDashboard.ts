@@ -16,7 +16,14 @@
 */
 import { computed, defineAsyncComponent, inject, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
-import { DIALOGS_KEY, I18N_KEY, VUEBUS_KEY, VueBusPlugin } from '@v1nt1248/3nclient-lib/plugins';
+import {
+  DIALOGS_KEY,
+  DialogsPlugin,
+  I18N_KEY,
+  I18nPlugin,
+  VUEBUS_KEY,
+  VueBusPlugin,
+} from '@v1nt1248/3nclient-lib/plugins';
 import { useNavigation } from '@/composables/useNavigation';
 import { useAppStore, useFsStore, useFavoriteStore, useFsEntryStore, useRunModeInfoStore } from '@/store';
 import { USER_FS, USER_DEVICE_FS, START_OF_SYSTEM_FS_ID } from '@/constants';
@@ -24,8 +31,8 @@ import type { AppGlobalEvents, FavoriteFolder, RootFsFolderView } from '@/types'
 
 export function useDashboard() {
   const bus = inject<VueBusPlugin<AppGlobalEvents>>(VUEBUS_KEY)!;
-  const { $tr } = inject(I18N_KEY)!;
-  const dialogs = inject(DIALOGS_KEY)!;
+  const { $tr } = inject<I18nPlugin>(I18N_KEY)!;
+  const dialogs = inject<DialogsPlugin>(DIALOGS_KEY)!;
 
   const { navigateToRouteSingle } = useNavigation();
 

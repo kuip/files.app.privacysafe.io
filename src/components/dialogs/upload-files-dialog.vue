@@ -16,7 +16,7 @@
 -->
 <script lang="ts" setup>
   import { computed, inject, ref, watch } from 'vue';
-  import { I18N_KEY } from '@v1nt1248/3nclient-lib/plugins';
+  import { I18N_KEY, I18nPlugin } from '@v1nt1248/3nclient-lib/plugins';
   import { Ui3nDropFiles, Ui3nIcon, Ui3nInputFile, Ui3nProgressLinear, Ui3nHtml } from '@v1nt1248/3nclient-lib';
   import { getRandomId, getFileExtension, formatFileSize } from '@v1nt1248/3nclient-lib/utils';
   import FileType from '@/components/common/file-type/file-type.vue';
@@ -33,7 +33,7 @@
     (event: 'confirm'): void;
   }>();
 
-  const { $tr } = inject(I18N_KEY)!;
+  const { $tr } = inject<I18nPlugin>(I18N_KEY)!;
 
   const files = ref<Record<string, File>>({});
   const isUploading = ref(false);

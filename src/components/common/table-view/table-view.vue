@@ -27,7 +27,7 @@
   } from 'vue';
   import { storeToRefs } from 'pinia';
   import type { AppGlobalEvents, ListingEntryExtended } from '@/types';
-  import { I18N_KEY, DIALOGS_KEY, VueBusPlugin, VUEBUS_KEY, NOTIFICATIONS_KEY } from '@v1nt1248/3nclient-lib/plugins';
+  import { I18N_KEY, I18nPlugin, DIALOGS_KEY, DialogsPlugin, VueBusPlugin, VUEBUS_KEY, NOTIFICATIONS_KEY, NotificationsPlugin } from '@v1nt1248/3nclient-lib/plugins';
   import type { Nullable, Ui3nTableExpose } from '@v1nt1248/3nclient-lib';
   import { useAppStore, useFsEntryStore, useRunModeInfoStore } from '@/store';
   import { useNavigation } from '@/composables/useNavigation';
@@ -42,9 +42,9 @@
   }>();
 
   const bus = inject<VueBusPlugin<AppGlobalEvents>>(VUEBUS_KEY)!;
-  const { $tr } = inject(I18N_KEY)!;
-  const dialogs = inject(DIALOGS_KEY)!;
-  const notifications = inject(NOTIFICATIONS_KEY)!;
+  const { $tr } = inject<I18nPlugin>(I18N_KEY)!;
+  const dialogs = inject<DialogsPlugin>(DIALOGS_KEY)!;
+  const notifications = inject<NotificationsPlugin>(NOTIFICATIONS_KEY)!;
 
   const {
     route,

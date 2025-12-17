@@ -111,6 +111,17 @@ export const useFsEntryStore = defineStore('fsEntry', () => {
     return loadFsEntityStats(fs, fullPath);
   }
 
+  async function getSyncedStatus({
+    fsId,
+    fullPath,
+  }: {
+    fsId: string;
+    fullPath: string;
+  }): Promise<Promise<web3n.files.SyncStatus> | undefined> {
+    const fs = getFs(fsId);
+    return fs.v?.sync?.status(fullPath);
+  }
+
   async function makeFolder({ fsId, path }: { fsId: string; path: string }): Promise<void> {
     const fs = getFs(fsId);
 
@@ -378,19 +389,13 @@ export const useFsEntryStore = defineStore('fsEntry', () => {
     }
   }
 
-  async function openFile(
-    fsId: string,
-    fullPath: string,
-    isLinkPath = false
-  ) {
+  async function openFile(fsId: string, fullPath: string, isLinkPath = false) {
     const fs = getFs(fsId);
-    const file = (isLinkPath ?
-      await (await fs.readLink(fullPath)).target() as FileW :
-      await (fs.writable ? fs.writableFile(fullPath) : fs.readonlyFile(fullPath))
-    );
+    const file = isLinkPath
+      ? ((await (await fs.readLink(fullPath)).target()) as FileW)
+      : await (fs.writable ? fs.writableFile(fullPath) : fs.readonlyFile(fullPath));
     await w3n.shell!.openFile!(file);
   }
-
 
   /* favorites  */
 
@@ -423,6 +428,7 @@ export const useFsEntryStore = defineStore('fsEntry', () => {
     updateEntityXAttrs,
     deleteEntityXAttrs,
     getEntityStats,
+    getSyncedStatus,
     makeFolder,
     moveEntity,
     moveEntities,

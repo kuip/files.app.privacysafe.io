@@ -1,6 +1,15 @@
 import { computed, type ComputedRef, defineAsyncComponent, inject, onBeforeMount, onBeforeUnmount, ref } from 'vue';
 import isEmpty from 'lodash/isEmpty';
-import { DIALOGS_KEY, I18N_KEY, NOTIFICATIONS_KEY, VUEBUS_KEY, VueBusPlugin } from '@v1nt1248/3nclient-lib/plugins';
+import {
+  DIALOGS_KEY,
+  DialogsPlugin,
+  I18N_KEY,
+  I18nPlugin,
+  NOTIFICATIONS_KEY,
+  NotificationsPlugin,
+  VUEBUS_KEY,
+  VueBusPlugin,
+} from '@v1nt1248/3nclient-lib/plugins';
 import { useNavigation } from '@/composables/useNavigation';
 import { useFsWindowState } from '@/composables/useFsWindowState';
 import { useAppStore, useFsEntryStore, useRunModeInfoStore } from '@/store';
@@ -9,9 +18,9 @@ import type { FsTableBulkActionName } from '@/components/common/fs-table-bulk-ac
 
 export function useFsFolder(fsFolderWindow: ComputedRef<'1' | '2'>) {
   const bus = inject<VueBusPlugin<AppGlobalEvents>>(VUEBUS_KEY)!;
-  const { $tr } = inject(I18N_KEY)!;
-  const dialogs = inject(DIALOGS_KEY)!;
-  const notifications = inject(NOTIFICATIONS_KEY)!;
+  const { $tr } = inject<I18nPlugin>(I18N_KEY)!;
+  const dialogs = inject<DialogsPlugin>(DIALOGS_KEY)!;
+  const notifications = inject<NotificationsPlugin>(NOTIFICATIONS_KEY)!;
 
   const appStore = useAppStore();
   const { setCommonLoading } = appStore;

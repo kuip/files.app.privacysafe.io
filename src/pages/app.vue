@@ -16,7 +16,7 @@
 -->
 <script lang="ts" setup>
   import { Ui3nMenu, Ui3nResize, Ui3nRipple, Ui3nProgressCircular } from '@v1nt1248/3nclient-lib';
-  import prLogo from '@/assets/images/logo.svg';
+  import prLogo from '@/assets/images/privacysafe-logo-new.svg';
   import { useAppView } from '@/composables/useAppView';
   import ContactIcon from '@/components/contacts/contact-icon.vue';
 
@@ -158,9 +158,8 @@
 
   .toolbarLogo {
     position: relative;
-    top: -2px;
     cursor: pointer;
-    height: var(--spacing-l);
+    height: var(--spacing-m);
   }
 
   .delimiter {

@@ -16,7 +16,7 @@
 -->
 <script lang="ts" setup>
 import { computed, inject, ref, watch } from 'vue';
-import { I18N_KEY } from '@v1nt1248/3nclient-lib/plugins';
+import { I18N_KEY, I18nPlugin } from '@v1nt1248/3nclient-lib/plugins';
 import { Ui3nInput } from '@v1nt1248/3nclient-lib';
 
 const props = defineProps<{
@@ -24,7 +24,7 @@ const props = defineProps<{
 }>();
 const emits = defineEmits(['select', 'validate', 'close', 'confirm']);
 
-const { $tr } = inject(I18N_KEY)!;
+const { $tr } = inject<I18nPlugin>(I18N_KEY)!;
 
 const inp = ref();
 const data = ref({ oldName: props.name, newName: props.name });

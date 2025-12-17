@@ -20,7 +20,7 @@
   import isEmpty from 'lodash/isEmpty';
   import size from 'lodash/size';
   import debounce from 'lodash/debounce';
-  import { I18N_KEY, VUEBUS_KEY, VueBusPlugin } from '@v1nt1248/3nclient-lib/plugins';
+  import { I18N_KEY, I18nPlugin, VUEBUS_KEY, VueBusPlugin } from '@v1nt1248/3nclient-lib/plugins';
   import { Ui3nIcon, Ui3nResize, Ui3nRipple, Ui3nTooltip } from '@v1nt1248/3nclient-lib';
   import type { Nullable } from '@v1nt1248/3nclient-lib';
   import { useNavigation } from '@/composables/useNavigation';
@@ -36,7 +36,7 @@
   }>();
 
   const bus = inject<VueBusPlugin<AppGlobalEvents>>(VUEBUS_KEY)!;
-  const { $tr } = inject(I18N_KEY)!;
+  const { $tr } = inject<I18nPlugin>(I18N_KEY)!;
 
   const {
     isSplittedMode,

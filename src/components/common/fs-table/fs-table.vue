@@ -19,7 +19,7 @@
   import size from 'lodash/size';
   import isEmpty from 'lodash/isEmpty';
   import cloneDeep from 'lodash/cloneDeep';
-  import { I18N_KEY, VUEBUS_KEY, VueBusPlugin } from '@v1nt1248/3nclient-lib/plugins';
+  import { I18N_KEY, I18nPlugin, VUEBUS_KEY, VueBusPlugin } from '@v1nt1248/3nclient-lib/plugins';
   import {
     Ui3nTable,
     Ui3nTooltip,
@@ -46,7 +46,7 @@
   defineSlots<FsTableSlots>();
 
   const bus = inject<VueBusPlugin<AppGlobalEvents>>(VUEBUS_KEY)!;
-  const { $tr } = inject(I18N_KEY)!;
+  const { $tr } = inject<I18nPlugin>(I18N_KEY)!;
 
   const currentTableWindow = computed(() => `${props.window}`) as ComputedRef<'1' | '2'>;
 

@@ -152,7 +152,7 @@
         </div>
 
         <div :class="$style.favoritesContent">
-          <FavoriteListItem
+          <favorite-list-item
             v-for="item in processedFavoriteFolders"
             :key="item.id"
             :item="item"
