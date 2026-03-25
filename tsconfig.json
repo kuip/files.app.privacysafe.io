@@ -8,7 +8,7 @@
     "useDefineForClassFields": true,
     "strictNullChecks": true,
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": false,
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -24,11 +24,14 @@
     "types": [
       "vite/client",
       "@types/node",
-      "@types/lodash"
+      "@types/lodash",
+      "@types/jasmine"
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@shared/*": ["shared/*"],
+      "@deno/*": ["src-deno/*"]
     },
     "plugins": [{
       "name": "@vuedx/typescript-plugin-vue"
@@ -37,6 +40,8 @@
   "include": [
     "vite.config.ts",
     "src/**/*",
+    "shared/**/*",
+    "src-deno/**/*",
     "@types/**/*"
   ],
   "exclude": [
