@@ -1,1 +1,1 @@
-# The app for storing passwords securely (Vue3)
+# Storage app for 3NWeb platform (Vue3)

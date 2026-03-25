@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2021 - 2022, 2024 - 2026 3NSoft Inc.
+ Copyright (C) 2021 - 2022, 2024 - 2025 3NSoft Inc.
 
  This program is free software: you can redistribute it and/or modify it under
  the terms of the GNU General Public License as published by the Free Software
@@ -263,14 +263,13 @@ declare namespace web3n.caps {
 	interface ShellCAPsSetting {
 		fileDialog?: FileDialogsCAPSettings;
 		deviceFiles?: DeviceFilesCAPSettings;
-		mounts?: DeviceMountFSCAPSetting;
+		mountFS?: DeviceMountFSCAPSetting;
 		userNotifications?: true;
 		openDashboard?: true;
 		startAppCmds?: StartCmdDef;
 		fsResource?: ResourcesRequest;
 		openFile?: OpenFileCAPSetting;
 		openFolder?: OpenFolderCAPSetting;
-		openInMountedFolder?: OpenInMountedFolderCAPSetting;
 		openURL?: OpenURLWhitelistEntry[];
 		clipboard?: ClipboardCAPSetting;
 	}
@@ -279,7 +278,7 @@ declare namespace web3n.caps {
 
 	type DeviceFilesCAPSettings = 'all';
 
-	type DeviceMountFSCAPSetting = 'any' | 'chat' | 'mail' | 'app';
+	type DeviceMountFSCAPSetting = 'all';
 
 	type ConnectivityCAPSetting = 'check';
 
@@ -291,8 +290,6 @@ declare namespace web3n.caps {
 	type OpenFileCAPSetting = 'all';
 
 	type OpenFolderCAPSetting = 'all';
-
-	type OpenInMountedFolderCAPSetting = 'all';
 
 	type OpenURLWhitelistEntry = {
 		schema: 'https';

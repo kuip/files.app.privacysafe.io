@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2022, 2025 - 2026 3NSoft Inc.
+ Copyright (C) 2022, 2025 3NSoft Inc.
 
  This program is free software: you can redistribute it and/or modify it under
  the terms of the GNU General Public License as published by the Free Software
@@ -27,12 +27,7 @@ declare namespace web3n.connectivity {
 		isOnline: boolean;
 		wsEvent?: {
 			ping?: number;
-			service: 'inbox' | 'storage';
-			type: 'heartbeat' | 'heartbeat-skip' | 'disconnected' | 'connected';
-			slowSocket?: true;
-			missingPongsFromServer?: number;
-			socketClosed?: true;
-			error?: any;
+			service: 'inbox'|'storage';
 		};
 	}
 
