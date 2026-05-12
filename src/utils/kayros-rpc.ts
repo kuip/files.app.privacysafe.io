@@ -13,6 +13,7 @@ export interface UploadedFileMetadata {
 export interface KayrosNotarizeStoredFileRequest {
   fullFilePath: string;
   metadataPayload: UploadedFileMetadata;
+  fsId?: string | null;
 }
 
 function serializeErrorDetails(err: unknown): string {

@@ -3,6 +3,7 @@ import {
   type KayrosNotarizeStoredFileRequest,
   type UploadedFileMetadata,
 } from '@/utils/kayros-rpc';
+import { getCompoundFsId } from '@/store/fs-operations/utils';
 
 export async function notarizeUploadedFileWithKayros({
   fs,
@@ -30,6 +31,7 @@ export async function notarizeUploadedFileWithKayros({
 
   const request: KayrosNotarizeStoredFileRequest = {
     fullFilePath,
+    fsId: getCompoundFsId(fs),
     metadataPayload,
   };
 
