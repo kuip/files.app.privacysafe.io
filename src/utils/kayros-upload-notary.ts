@@ -35,5 +35,5 @@ export async function notarizeUploadedFileWithKayros({
     metadataPayload,
   };
 
-  await notarizeStoredFileWithKayros(request, file, fs);
+  await notarizeStoredFileWithKayros(request, file);
 }

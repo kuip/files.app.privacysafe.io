@@ -94,11 +94,10 @@ async function callKayros<TRequest, TResponse>(
 export async function notarizeStoredFileWithKayros(
   request: KayrosNotarizeStoredFileRequest,
   file: web3n.files.WritableFile,
-  fs: web3n.files.WritableFS,
 ): Promise<void> {
   await callKayros<KayrosNotarizeStoredFileRequest, void>(
     'notarizeStoredFile',
     request,
-    [file, fs],
+    [file],
   );
 }
